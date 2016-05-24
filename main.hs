@@ -13,9 +13,23 @@ data Pagina = Pagina{connPool :: ConnectionPool}
 
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+--aula
 Clientes json
    nome Text
    deriving Show
+
+
+--site --------------------------------------------
+Cliente json
+    nome Text
+    telefone Text
+    preposto Text
+    email Text
+    endereco Text
+    bairro Text
+    referencia Text
+    indicacao Text
+    deriving Show
 
 
 Users json
@@ -23,19 +37,44 @@ Users json
    login Text
    senha Text
    deriving Show
-   
-   
-Produtoz json
+ 
+
+Produtos json
     nome Text
+    descricao Text
     valor Double
     deriving Show
 
 
+Pedido json
+    nome Text
+    --clientenome
+    telefone Text
+    --cliente telefone
+    endentrega Text
+    referencia Text
+    deriving Show
+    
+ProdutoPedido json
+    idPedido Text
+    nome Text
+    --ProdutoNome
+    valor Double
+    --produtoValor
+    total Double
+    deriving Show
+    
+--não será usado ------------------------------
 Aluno json
     nome Text
     ra Text
     cel Text 
     idade Text
+    deriving Show
+    
+Produtoz json
+    nome Text
+    valor Double
     deriving Show
     
 ClientesProdutos json
