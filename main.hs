@@ -88,10 +88,13 @@ ClientesProdutos json
 
 mkYesod "Pagina" [parseRoutes|
 / HomeR GET 
-/cadastro UserR GET POST OPTIONS
+/cadastro/ UserR GET POST OPTIONS
+/cadastro/cliente ClienteR GET POST
+/cadastro/produto ProdutoR GET POST
+/cadastro/pedido PedidoR GET POST
+/cadastro/usuario UsuarioR GET POST
 /listar/cliente/#ClientesId ListaR GET OPTIONS
 /action/cliente/#ClientesId ActionR PUT DELETE
-/produto/cadastro ProdutoR GET POST
 /produto/checar/#ProdutozId ChecarProdR GET
 /aluno/cadastro AlunoR GET POST
 /aluno/checar/#AlunoId ChecarAlunoR GET
@@ -100,7 +103,6 @@ mkYesod "Pagina" [parseRoutes|
 /consulta ConsultaR GET
 /erro ErroR GET
 /login LoginR GET
-/usuario UsuarioR GET POST
 /perfil/#UsersId PerfilR GET
 /admin AdminR GET
 /logout LogoutR GET
@@ -175,7 +177,6 @@ getPerfilR uid = do
           toWidget $ $(luciusFile "templates/perfil.lucius")
           $(whamletFile "templates/perfil.hamlet")
 
-      |]
 
 postUsuarioR :: Handler Html
 postUsuarioR = do
