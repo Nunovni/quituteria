@@ -9,36 +9,81 @@ import Data.Text
 import Database.Persist.Postgresql
     ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
 
-data Sitio = Sitio { connPool :: ConnectionPool }
+data Pagina = Pagina { connPool :: ConnectionPool }
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
-Departamento
-   nome Text
-   sigla Text sqltype=varchar(2)
-   deriving Show
 
-Pessoa
+Cliente json
+    nome Text
+    telefone Text
+    preposto Text
+    email Text
+    endereco Text
+    bairro Text
+    referencia Text
+    indicacao Text
+    deriving Show
+
+
+Users json
    nome Text
-   idade Int
-   salario Double
-   deptoid DepartamentoId
+   login Text
+   senha Text
    deriving Show
+ 
+
+Produtos json
+    nome Text
+    descricao Text
+    valor Double
+    deriving Show
+
+
+Pedido json
+    nome Text
+    --clientenome
+    telefone Text
+    --cliente telefone
+    endentrega Text
+    referencia Text
+    dataPed Date
+    dataEntrega Date
+    total Double
+    deriving Show
+    
+ProdutoPedido json
+    idPedido Text
+    nome Text
+    --ProdutoNome
+    valor Double
+    --produtoValor
+    total Double
+    deriving Show
+
+--ver se funfa do jeito abaixo
+ClientesProdutos json
+    clid ClientesId
+    prid ProdutozId
+    alid AlunoId
+    UniqueClientesProdutos clid prid alid
+    --unique serve só pra restringir o cadastro do mesmo cliente pro mesmo produto
 |]
 
-mkYesodData "Sitio" pRoutes
+mkYesodData "Pagina" pRoutes
 
-mkMessage "Sitio" "messages" "pt-br"
 
-instance YesodPersist Sitio where
-   type YesodPersistBackend Sitio = SqlBackend
+mkMessage "Pagina" "messages" "pt-br"
+
+instance YesodPersist Pagina where
+   type YesodPersistBackend Pagina = SqlBackend
    runDB f = do
        master <- getYesod
        let pool = connPool master
        runSqlPool f pool
 
-instance Yesod Sitio where
+instance Yesod Pagina where
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
 
-instance RenderMessage Sitio FormMessage where
+instance RenderMessage Pagina FormMessage where
     renderMessage _ _ = defaultFormMessage
