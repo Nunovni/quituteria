@@ -279,7 +279,7 @@ getVendaCliR pid = do
 
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ [whamlet| 
-    <h1> Controle du capeta
+    <h1> Quituteria!
     <p>
     <a href=@{ConsultaR}>Lista de clientes organizada por nome
     <p>
