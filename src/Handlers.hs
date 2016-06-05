@@ -27,6 +27,10 @@ getHomeR = defaultLayout $ [whamlet|
     <p>
     <a href=@{ListProdR}>Produtos Cadastrados
     <p>
+    <a href=@{PedidoR}>Cadastrar Pedidos
+    <p>
+    
+    
 
 |] 
 
@@ -65,7 +69,7 @@ isAdmin = do
 
 
 
---alterado pelo pessoa
+--Formularios
 formCliente :: Form Cliente
 formCliente = renderDivs $ Cliente <$>
              areq textField "Nome" Nothing <*>
@@ -82,8 +86,7 @@ formProduto = renderDivs $ Produto <$>
              
 formPedido :: Form Pedido
 formPedido = renderDivs $ Pedido <$>
-             areq (selectField clint) "Depto" Nothing <*>
-             lift (liftIO getCurrentTime) <*>
+             areq (selectField clint) "Cliente" Nothing <*>
              areq dayField "Entrega" Nothing <*>
              areq doubleField "Total" Nothing
 
@@ -92,27 +95,7 @@ clint = do
        entidades <- runDB $ selectList [] [Asc ClienteNome] 
        optionsPairs $ fmap (\ent -> (clienteNome $ entityVal ent, entityKey ent)) entidades
      
-{-formPessoa :: Form Pessoa
-formPessoa = renderDivs $ Pessoa <$>
-             areq textField "Nome" Nothing <*>
-             areq intField "Idade" Nothing <*>
-             areq doubleField "Salario" Nothing <*>
-             areq (selectField dptos) "Depto" Nothing
 
-formDepto :: Form Departamento
-formDepto = renderDivs $ Departamento <$>
-            areq textField "Nome" Nothing <*>
-            areq textField FieldSettings{fsId=Just "hident2",
-                           fsLabel="Sigla",
-                           fsTooltip= Nothing,
-                           fsName= Nothing,
-                           fsAttrs=[("maxlength","2")]} Nothing
-
-
-dptos = do
-       entidades <- runDB $ selectList [] [Asc DepartamentoNome] 
-       optionsPairs $ fmap (\ent -> (departamentoSigla $ entityVal ent, entityKey ent)) entidades
--}
 getHelloR :: Handler Html
 getHelloR = defaultLayout [whamlet|
      <h1> _{MsgHello}
@@ -232,6 +215,23 @@ getUsuarioR = do
                      ^{widget}
                      <input type="submit" value="Enviar">
            |]
+
+
+getPedidoR :: Handler Html
+getPedidoR = do
+             (widget, enctype) <- generateFormPost formPedido
+             defaultLayout $ widgetForm PedidoR enctype widget "Pedidos"
+
+postPedidoR :: Handler Html
+postPedidoR = do
+                ((result, _), _) <- runFormPost formPedido
+                case result of
+                    FormSuccess pedido -> do
+                       runDB $ insert pedido 
+                       defaultLayout [whamlet| 
+                           <h1> Inserido com sucesso. 
+                       |]
+                    _ -> redirect PedidoR
 
 formUser :: Form Users
 formUser = renderDivs $ Users <$>

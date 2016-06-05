@@ -6,6 +6,7 @@ module Foundation where
 import Import
 import Yesod
 import Data.Text
+import Data.Time
 import Database.Persist.Postgresql
     ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
 
@@ -30,7 +31,6 @@ Produto json
 Pedido json
     clienteid ClienteId
     --clientenome
-    dataPed Day
     dataEntrega Day
     total Double
     deriving Show
