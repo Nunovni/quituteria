@@ -12,8 +12,10 @@ pRoutes = [parseRoutes|
 --   /hello HelloR GET
 /consulta/cliente ListarR GET 
 /consulta/produto ListProdR GET 
+--/consulta/pedido ListPedR GET
 /consulta/cliente/#ClienteId ListaCliR GET POST
 /consulta/produto/#ProdutoId ListaProdR GET POST
+--/consulta/pedido/#PedidoId ListaPedR GET POST
 /perfil/#UsersId PerfilR GET
 /erro ErroR GET
 /login LoginR GET POST

@@ -29,6 +29,15 @@ getHomeR = defaultLayout $ [whamlet|
     <p>
     <a href=@{PedidoR}>Cadastrar Pedidos
     <p>
+    <p>
+    <p>
+    <p>
+    <a href=@{LoginR}>Efetuar Login
+    <p>
+    <a href=@{LogoutR}>Efetuar Logout
+    <p>
+    
+    
     
     
 
@@ -171,8 +180,22 @@ getListProdR = do
                 form  { display:inline; }
                 input { background-color: #ecc; border:0;}
              |]
+{-
+getListPedR :: Handler Html
+getListPedR = do
+             listaPed <- runDB $ selectList [] [Asc PedidoId]
+             defaultLayout $ [whamlet|
+                 <h1> Pedidos cadastrados:
+                 $forall Entity peid pedido <- listaPed
+                     <a href=@{ListaPedR peid}> #{pedidoNome pedido} 
+                     <form method=post action=@{ListaPedR peid}> 
+                         <input type="submit" value="Deletar"><br>
+             |] >> toWidget [lucius|
+                form  { display:inline; }
+                input { background-color: #ecc; border:0;}
+             |]
 
-
+-}
 postClienteR :: Handler Html
 postClienteR = do
                 ((result, _), _) <- runFormPost formCliente
@@ -232,7 +255,24 @@ postPedidoR = do
                            <h1> Inserido com sucesso. 
                        |]
                     _ -> redirect PedidoR
+{-
+getListaPedR :: PedidoId -> Handler Html
+getListaPedR peid = do
+             pedido <- runDB $ get404 peid 
+             defaultLayout [whamlet| 
+                 <h1> Dados do Pedido
+                 <p> Cliente: #{pedidoNome pedido}
+                 <p> Entrega: #{pedidoDataEntrega pedido}
+                 <p> Valor: R$#{pedidoTotal pedido}
+                 |]
 
+
+
+postListaPedR :: PedidoId -> Handler Html
+postListaPedR peid = do
+     runDB $ delete peid
+     redirect ListPedR
+-} 
 formUser :: Form Users
 formUser = renderDivs $ Users <$>
            areq textField "Nome: " Nothing <*>

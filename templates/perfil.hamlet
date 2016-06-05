@@ -1,2 +1,4 @@
 <p><b> Pagina de #{usersNome user}
 <p><b> Login: #{usersLogin user}
+<p><p>
+<a href=@{HomeR}>Voltar a pagina inicial
