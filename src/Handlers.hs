@@ -18,14 +18,18 @@ getHomeR :: Handler Html
 getHomeR = defaultLayout $ [whamlet| 
     <h1> Quituteria!
     <p>
-    <a href=@{ClienteR}>Cadastro de clientes
+    <a href=@{ClienteR}>Cadastro de Clientes
+    <p>
+    <a href=@{ProdR}>Cadastro de Produtos
     <p>
     <a href=@{ListarR}>Clientes Cadastrados
+    <p>
+    <a href=@{ListProdR}>Produtos Cadastrados
     <p>
 
 |] 
 
---trexo que estava no main
+
 instance YesodPersist Pagina where
    type YesodPersistBackend Pagina = SqlBackend
    runDB f = do
@@ -57,7 +61,7 @@ isAdmin = do
         Just "admin" -> Authorized 
         Just _ -> Unauthorized "Voce precisa ser admin para entrar aqui"
 
---fim do trexo que estava no main
+
 
 
 --alterado pelo pessoa
@@ -67,7 +71,14 @@ formCliente = renderDivs $ Cliente <$>
              areq intField "Telefone" Nothing <*>
              areq textField "Endereco" Nothing <*>
              areq textField "Cidade" Nothing
-             
+        
+
+formProduto :: Form Produto
+formProduto = renderDivs $ Produto <$>
+             areq textField "Nome" Nothing <*>
+             areq textField "Descrição" Nothing <*>
+             areq doubleField "Valor" Nothing
+     
 {-formPessoa :: Form Pessoa
 formPessoa = renderDivs $ Pessoa <$>
              areq textField "Nome" Nothing <*>
@@ -109,15 +120,30 @@ getClienteR = do
              (widget, enctype) <- generateFormPost formCliente
              defaultLayout $ widgetForm ClienteR enctype widget "Clientes"
 
+getProdR :: Handler Html
+getProdR = do
+             (widget, enctype) <- generateFormPost formProduto
+             defaultLayout $ widgetForm ProdR enctype widget "Produto"
+
+
 getListaCliR :: ClienteId -> Handler Html
 getListaCliR cid = do
              cliente <- runDB $ get404 cid 
              defaultLayout [whamlet| 
-                 <h1> Seja bem-vindx #{clienteNome cliente}
+                 <h1> Dados do cliente: #{clienteNome cliente}
                  <p> Telefone: #{clienteTelefone cliente}
                  <p> Endereço: #{clienteEndereco cliente}
                  <p> Cidade: #{clienteCidade cliente}
              |]
+
+getListaProdR :: ProdutoId -> Handler Html
+getListaProdR pid = do
+             produto <- runDB $ get404 pid 
+             defaultLayout [whamlet| 
+                 <h1> Dados do produto #{produtoNome produto}
+                 <p> Descrição: #{produtoDescricao produto}
+                 <p> Valor: R$#{produtoValor produto}
+                 |]
 
 
 --Tela de consulta de clientes cadastrados
@@ -136,6 +162,20 @@ getListarR = do
              |]
 
 
+getListProdR :: Handler Html
+getListProdR = do
+             listaP <- runDB $ selectList [] [Asc ProdutoNome]
+             defaultLayout $ [whamlet|
+                 <h1> Produtos cadastrados:
+                 $forall Entity pid produto <- listaP
+                     <a href=@{ListaProdR pid}> #{produtoNome produto} 
+                     <form method=post action=@{ListaProdR pid}> 
+                         <input type="submit" value="Deletar"><br>
+             |] >> toWidget [lucius|
+                form  { display:inline; }
+                input { background-color: #ecc; border:0;}
+             |]
+
 
 postClienteR :: Handler Html
 postClienteR = do
@@ -145,14 +185,31 @@ postClienteR = do
                        runDB $ insert cliente 
                        defaultLayout [whamlet| 
                            <h1> #{clienteNome cliente} Inseridx com sucesso. 
-                           <input name="" type="button" onClick="@{ClienteR}" value="Voltar">
+                           <input name="" type="button" onClick="{/consulta/cliente}" value="Voltar">
                        |]
                     _ -> redirect ClienteR
+
+postProdR :: Handler Html
+postProdR = do
+                ((result, _), _) <- runFormPost formProduto
+                case result of
+                    FormSuccess produto -> do
+                       runDB $ insert produto 
+                       defaultLayout [whamlet| 
+                           <h1> #{produtoNome produto} Inserido com sucesso. 
+                           <input name="" type="button" onClick="{/consulta/produto}" value="Voltar">
+                       |]
+                    _ -> redirect ProdR
 
 postListaCliR :: ClienteId -> Handler Html
 postListaCliR cid = do
      runDB $ delete cid
      redirect ListarR
+
+postListaProdR :: ProdutoId -> Handler Html
+postListaProdR pid = do
+     runDB $ delete pid
+     redirect ListProdR
      
 getUsuarioR :: Handler Html
 getUsuarioR = do

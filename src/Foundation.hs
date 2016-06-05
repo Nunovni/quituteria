@@ -20,6 +20,13 @@ Cliente json
     cidade Text
     deriving Show
 
+Produto json
+    nome Text
+    descricao Text
+    valor Double
+    deriving Show
+
+
 Users json
    nome Text
    login Text
