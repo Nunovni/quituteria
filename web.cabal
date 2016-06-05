@@ -4,9 +4,9 @@ cabal-version:     >= 1.8
 build-type:        Simple
 
 executable         web
-    hs-source-dirs: .
+    hs-source-dirs: src
 
-    main-is:           main.hs
+    main-is:          ../main.hs
 
     ghc-options:       -threaded -O2 -rtsopts -with-rtsopts=-N
 

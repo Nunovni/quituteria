@@ -2,19 +2,18 @@
              TemplateHaskell, GADTs, FlexibleInstances,
              MultiParamTypeClasses, DeriveDataTypeable,
              GeneralizedNewtypeDeriving, ViewPatterns, EmptyDataDecls #-}
+             
 module Main where
 import Import
 import Yesod
+
 import Foundation
 import Handlers
+import Control.Monad.Logger (runStdoutLoggingT)
 import Control.Applicative
 import Data.Text
-import Database.Persist.Postgresql
 import Text.Lucius
-import Control.Monad.Logger (runStdoutLoggingT)
-
-
-data Pagina = Pagina{connPool :: ConnectionPool}
+import Database.Persist.Postgresql
 
 
 connStr = "dbname=d5h7illvto4uf1 host=ec2-54-163-226-48.compute-1.amazonaws.com user=ewmpaizbvqiapn password=o2Qua4NTtZeviSPvjC7k_9LJ5c port=5432"

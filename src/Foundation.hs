@@ -15,98 +15,25 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 
 Cliente json
     nome Text
-    telefone Text
-    preposto Text
-    email Text
+    telefone Int
     endereco Text
-    bairro Text
-    referencia Text
-    indicacao Text
+    cidade Text
     deriving Show
-
 
 Users json
    nome Text
    login Text
    senha Text
    deriving Show
- 
-
-Produtos json
-    nome Text
-    descricao Text
-    valor Double
-    deriving Show
-
-
-Pedido json
-    nome Text
-    --clientenome
-    telefone Text
-    --cliente telefone
-    endentrega Text
-    referencia Text
-    dataPed Date
-    dataEntrega Date
-    total Double
-    deriving Show
-    
-ProdutoPedido json
-    idPedido Text
-    nome Text
-    --ProdutoNome
-    valor Double
-    --produtoValor
-    total Double
-    deriving Show
-
---ver se funfa do jeito abaixo
-ClientesProdutos json
-    clid ClientesId
-    prid ProdutozId
-    alid AlunoId
-    UniqueClientesProdutos clid prid alid
-    --unique serve só pra restringir o cadastro do mesmo cliente pro mesmo produto
-|]
+ |]
 
 mkYesodData "Pagina" pRoutes
 
 
 mkMessage "Pagina" "messages" "pt-br"
 
---estava no main
-instance YesodPersist Pagina where
-   type YesodPersistBackend Pagina = SqlBackend
-   runDB f = do
-       master <- getYesod
-       let pool = connPool master
-       runSqlPool f pool
 
 
-instance Yesod Pagina where
-    authRoute _ = Just LoginR
-    
-    isAuthorized LoginR _ = return Authorized
-    isAuthorized ErroR _ = return Authorized
-    isAuthorized HomeR _ = return Authorized
-    isAuthorized UsuarioR _ = return Authorized
-    isAuthorized AdminR _ = isAdmin
-    isAuthorized _ _ = isUser
-
-isUser = do
-    mu <- lookupSession "_ID"
-    return $ case mu of
-        Nothing -> AuthenticationRequired
-        Just _ -> Authorized
-    
-isAdmin = do
-    mu <- lookupSession "_ID"
-    return $ case mu of
-        Nothing -> AuthenticationRequired
-        Just "admin" -> Authorized 
-        Just _ -> Unauthorized "Voce precisa ser admin para entrar aqui"
-
---estava no main
 
 type Form a = Html -> MForm Handler (FormResult a, Widget)
 
