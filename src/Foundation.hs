@@ -27,6 +27,14 @@ Produto json
     deriving Show
 
 
+Pedido json
+    clienteid ClienteId
+    --clientenome
+    dataPed Day
+    dataEntrega Day
+    total Double
+    deriving Show
+
 Users json
    nome Text
    login Text

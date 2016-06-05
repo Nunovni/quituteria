@@ -8,6 +8,7 @@ pRoutes = [parseRoutes|
 /cadastro/cliente ClienteR GET POST
 /cadastro/produto ProdR GET POST
 /cadastro/usuario UsuarioR GET POST
+/cadastro/pedido PedidoR GET POST
 --   /hello HelloR GET
 /consulta/cliente ListarR GET 
 /consulta/produto ListProdR GET 

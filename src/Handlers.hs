@@ -8,6 +8,7 @@ import Foundation
 import Control.Monad.Logger (runStdoutLoggingT)
 import Control.Applicative
 import Data.Text
+import Data.Time
 import Text.Lucius
 
 import Database.Persist.Postgresql
@@ -78,6 +79,18 @@ formProduto = renderDivs $ Produto <$>
              areq textField "Nome" Nothing <*>
              areq textField "Descrição" Nothing <*>
              areq doubleField "Valor" Nothing
+             
+formPedido :: Form Pedido
+formPedido = renderDivs $ Pedido <$>
+             areq (selectField clint) "Depto" Nothing <*>
+             lift (liftIO getCurrentTime) <*>
+             areq dayField "Entrega" Nothing <*>
+             areq doubleField "Total" Nothing
+
+             
+clint = do
+       entidades <- runDB $ selectList [] [Asc ClienteNome] 
+       optionsPairs $ fmap (\ent -> (clienteNome $ entityVal ent, entityKey ent)) entidades
      
 {-formPessoa :: Form Pessoa
 formPessoa = renderDivs $ Pessoa <$>
