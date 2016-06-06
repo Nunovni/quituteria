@@ -1,3 +1,15 @@
-<form method=post enctype=#{enctype} action=@{LoginR}>
-    ^{widget}
-    <input type="submit" value="Login">
+<div class="container white-bg" style="padding-bottom: 30px">  
+  <div class="page-header">
+    <h1 class="title"><i class="fa fa-book" aria-hidden="true"></i> Quituteria da Fafa
+
+  <div class="row">
+    <div class="col-sm-3">
+      ^{menu}
+    <div class="col-sm-9">
+      <div class="well">
+        <p>É novo por aqui? <a href="@{UsuarioR}" class="btn btn-primary btn-lg">Cadastre novo usuário</a>
+      <div .row>
+        <div .col-sm-6 .col-sm-offset-3>
+          <form method=post enctype=#{enctype} action=@{LoginR} class="form-horizontal">
+            ^{widget}
+            <input type="submit" value="Login" class="btn btn-default">

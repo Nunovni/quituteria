@@ -20,31 +20,7 @@ import Database.Persist.Postgresql
 mkYesodDispatch "Pagina" pRoutes
 
 
-{-
-getHomeR :: Handler Html
-getHomeR = defaultLayout $ [whamlet| 
-    <h1> Quituteria!
-    <p>
-    <a href=@{ClienteR}>Cadastro de Clientes
-    <p>
-    <a href=@{ProdR}>Cadastro de Produtos
-    <p>
-    <a href=@{ListarR}>Clientes Cadastrados
-    <p>
-    <a href=@{ListProdR}>Produtos Cadastrados
-    <p>
-    <a href=@{PedidoR}>Cadastrar Pedidos
-    <p>
-    <p>
-    <p>
-    <p>
-    <a href=@{LoginR}>Efetuar Login
-    <p>
-    <a href=@{LogoutR}>Efetuar Logout
-    <p>
-    
--}    
-    
+
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
                 menu <- widgetMenu
@@ -59,10 +35,6 @@ getHomeR = defaultLayout $ do
                     [hamlet|
                         <meta charset="UTF-8">  
                     |]                
-
-    
-
-
 
 
 instance YesodPersist Pagina where
@@ -252,7 +224,7 @@ postListaProdR pid = do
      
 getUsuarioR :: Handler Html
 getUsuarioR = do
-           (widget, enctype) <- generateFormPost formUser
+           (widget, enctype) <- generateFormPost formUsers
            defaultLayout $ do
                 menu <- widgetMenu
                 toWidget $ $(luciusFile "templates/style.lucius")
@@ -300,11 +272,11 @@ postListaPedR peid = do
      runDB $ delete peid
      redirect ListPedR
 -} 
-formUser :: Form Users
-formUser = renderDivs $ Users <$>
-           areq textField "Nome: " Nothing <*>
-           areq textField "Login: " Nothing <*>
-           areq passwordField "Senha: " Nothing
+formUsers :: Form Users
+formUsers = renderBootstrap3 BootstrapBasicForm $ Users <$>
+           areq textField (bfs ("Nome" :: Text)) Nothing <*>
+           areq textField (bfs ("Login" :: Text)) Nothing <*>
+           areq passwordField (bfs ("Senha" :: Text)) Nothing
 
 
 formLogin :: Form (Text,Text)
@@ -323,7 +295,7 @@ getPerfilR uid = do
 
 postUsuarioR :: Handler Html
 postUsuarioR = do
-           ((result, _), _) <- runFormPost formUser
+           ((result, _), _) <- runFormPost formUsers
            case result of 
                FormSuccess user -> (runDB $ insert user) >>= \piid -> redirect (PerfilR piid)
                _ -> redirect ErroR
@@ -337,12 +309,20 @@ getAdminR = defaultLayout [whamlet|
 
 getLoginR :: Handler Html
 getLoginR = do
-           (widget, enctype) <- generateFormPost formLogin
-           defaultLayout [whamlet|
-                 <form method=post enctype=#{enctype} action=@{LoginR}>
-                     ^{widget}
-                     <input type="submit" value="Login">
-           |]
+             (widget, enctype) <- generateFormPost formLogin
+             defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/login.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                        <meta charset="UTF-8">  
+                    |]
 
 postLoginR :: Handler Html
 postLoginR = do
