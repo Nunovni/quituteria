@@ -1,0 +1,17 @@
+<div class="container white-bg" style="padding-bottom: 30px">  
+  <div class="page-header">
+    <h1 class="title"><i class="fa fa-book" aria-hidden="true"></i> Quituteria da Fafa
+
+  <div class="row">
+    <div class="col-sm-3">
+      ^{menu}
+    <div class="col-sm-9">
+      <h2>Quituteria da Fafa
+      <p>O melhor lugar para encher a pança.
+        <div class="panel panel-default">
+        <div class="panel-body">
+          <h3>Quituteria Online. Um projeto de:
+          <ul>
+            <li>Valter dos Santos
+            <li>Cesar Danziger
+            <li>Lucas Maia
