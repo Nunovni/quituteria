@@ -10,11 +10,17 @@ import Control.Applicative
 import Data.Text
 import Data.Time
 import Text.Lucius
+import Text.Julius
+import Text.Blaze.Html.Renderer.String (renderHtml)
+import Yesod.Form.Bootstrap3
+
 
 import Database.Persist.Postgresql
 
 mkYesodDispatch "Pagina" pRoutes
 
+
+{-
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ [whamlet| 
     <h1> Quituteria!
@@ -37,11 +43,26 @@ getHomeR = defaultLayout $ [whamlet|
     <a href=@{LogoutR}>Efetuar Logout
     <p>
     
+-}    
     
-    
+getHomeR :: Handler Html
+getHomeR = defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/index.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                        <meta charset="UTF-8">  
+                    |]                
+
     
 
-|] 
+
 
 
 instance YesodPersist Pagina where
@@ -98,7 +119,6 @@ formPedido = renderDivs $ Pedido <$>
              areq (selectField clint) "Cliente" Nothing <*>
              areq dayField "Entrega" Nothing <*>
              areq doubleField "Total" Nothing
-
              
 clint = do
        entidades <- runDB $ selectList [] [Asc ClienteNome] 
@@ -233,12 +253,19 @@ postListaProdR pid = do
 getUsuarioR :: Handler Html
 getUsuarioR = do
            (widget, enctype) <- generateFormPost formUser
-           defaultLayout [whamlet|
-                 <form method=post enctype=#{enctype} action=@{UsuarioR}>
-                     ^{widget}
-                     <input type="submit" value="Enviar">
-           |]
-
+           defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/cadastro.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                        <meta charset="UTF-8">  
+                    |]
 
 getPedidoR :: Handler Html
 getPedidoR = do
@@ -279,10 +306,11 @@ formUser = renderDivs $ Users <$>
            areq textField "Login: " Nothing <*>
            areq passwordField "Senha: " Nothing
 
+
 formLogin :: Form (Text,Text)
-formLogin = renderDivs $ (,) <$>
-           areq textField "Login: " Nothing <*>
-           areq passwordField "Senha: " Nothing
+formLogin = renderBootstrap3 BootstrapBasicForm $ (,) <$>
+           areq textField (bfs ("Login" :: Text)) Nothing <*>
+           areq passwordField (bfs ("Senha" :: Text)) Nothing
 
 
 
@@ -299,6 +327,7 @@ postUsuarioR = do
            case result of 
                FormSuccess user -> (runDB $ insert user) >>= \piid -> redirect (PerfilR piid)
                _ -> redirect ErroR
+               
                
 
 getAdminR :: Handler Html
@@ -338,3 +367,39 @@ getErroR :: Handler Html
 getErroR = defaultLayout [whamlet|
     cadastro deu pau com sucesso
 |]
+
+
+widgetMenu = do
+    mu <- lookupSession "_ID"
+    return $ case mu of
+        Nothing ->  [hamlet|
+            <nav id="column_left">
+                <ul class="nav nav-list">
+                    <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
+                    <li><a href="@{ClienteR}"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
+                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
+                    <li><a href="@{ProdR}"> <i class="fa fa-file-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>
+                    <li><a href="@{LoginR}"><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> Login</a>
+                    |]
+        Just "0" -> [hamlet|
+            <nav id="column_left">
+                <ul class="nav nav-list">
+                    <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
+                    <li><a href="@{ClienteR}"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
+                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
+                    <li><a href="@{ProdR}"> <i class="fa fa-file-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>
+                    <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
+                    <li><a href="@{AdminR}"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> Administração</a>
+                    |]
+        Just _ -> [hamlet|
+            <nav id="column_left">
+                <ul class="nav nav-list">
+                    <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
+                    <li><a href="@{ClienteR}"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
+                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
+                    <li><a href="@{ProdR}"> <i class="fa fa-file-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>
+                    <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
+                    |]
