@@ -357,8 +357,8 @@ widgetMenu = do
                 <ul class="nav nav-list">
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
                     <li><a href="@{ClienteR}"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
-                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
                     <li><a href="@{ProdR}"> <i class="fa fa-file-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
                     <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>
                     <li><a href="@{LoginR}"><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> Login</a>
                     |]
@@ -367,8 +367,8 @@ widgetMenu = do
                 <ul class="nav nav-list">
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
                     <li><a href="@{ClienteR}"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
-                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
                     <li><a href="@{ProdR}"> <i class="fa fa-file-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
                     <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
                     <li><a href="@{AdminR}"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> Administração</a>
@@ -378,8 +378,8 @@ widgetMenu = do
                 <ul class="nav nav-list">
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
                     <li><a href="@{ClienteR}"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
-                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
                     <li><a href="@{ProdR}"> <i class="fa fa-file-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
-                    <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>
+                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
+                    <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
                     |]
