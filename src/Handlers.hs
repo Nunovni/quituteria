@@ -489,7 +489,6 @@ widgetMenu = do
                     <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
                     <li><a href="@{ListFornR}"><i class="fa fa-truck" aria-hidden="true"></i> Fornecedores Cadastrados</a><p>  
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
-                    <li><a href="@{AdminR}"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> Administração</a>
                     |]
         Just _ -> [hamlet|
             <nav id="column_left">
