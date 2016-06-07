@@ -196,16 +196,26 @@ getListarR = do
 getListProdR :: Handler Html
 getListProdR = do
              listaP <- runDB $ selectList [] [Asc ProdutoNome]
-             defaultLayout $ [whamlet|
-                 <h1> Produtos cadastrados:
-                 $forall Entity pid produto <- listaP
-                     <a href=@{ListaProdR pid}> #{produtoNome produto} 
-                     <form method=post action=@{ListaProdR pid}> 
-                         <input type="submit" value="Deletar"><br>
+             defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/verprodutos.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                addStylesheetRemote "https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css"
+                addScriptRemote "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"
+                addScriptRemote "https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                <meta charset="UTF-8">  
              |] >> toWidget [lucius|
                 form  { display:inline; }
                 input { background-color: #ecc; border:0;}
              |]
+
 {-
 getListPedR :: Handler Html
 getListPedR = do

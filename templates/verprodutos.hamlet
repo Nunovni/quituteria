@@ -6,11 +6,10 @@
     <div class="col-sm-3">
       ^{menu}
     <div class="col-sm-9">
-        <h1>Lista de Clientes
+        <h1>Lista de Prdutos
         <table id="cliente" class="table table-striped table-bordered" cellspacing="0" width="100%">
           <thead>
           <tbody>
-                 <h1> Produtos cadastrados:
                  $forall Entity pid produto <- listaP
                      <a href=@{ListaProdR pid}> #{produtoNome produto} 
                      <form method=post action=@{ListaProdR pid}> 
