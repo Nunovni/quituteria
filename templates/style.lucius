@@ -17,7 +17,7 @@ body {
 .nav-list li a {
     text-decoration: none;
     display: block;
-    padding: 10px;
+    padding: 8px;
     cursor: pointer;
     border-bottom: 0px solid #406187 !important;
     color: #9d9d9d
@@ -26,7 +26,7 @@ body {
 .nav-list > li > a {
     color: black;
     font-size: 16px;
-    padding-left: 13px !important;
+    padding-left: 5px !important;
     border-bottom: 0px solid #585858
 }
 .nav-list > li > a:hover {
