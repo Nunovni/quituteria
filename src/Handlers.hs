@@ -76,7 +76,7 @@ isAdmin = do
 formCliente :: Form Cliente
 formCliente = renderDivs $ Cliente <$>
              areq textField "Nome" Nothing <*>
-             areq intField "Telefone" Nothing <*>
+             areq textField "Telefone" Nothing <*>
              areq textField "Endereco" Nothing <*>
              areq textField "Cidade" Nothing
         
@@ -84,19 +84,16 @@ formCliente = renderDivs $ Cliente <$>
 formProduto :: Form Produto
 formProduto = renderDivs $ Produto <$>
              areq textField "Nome" Nothing <*>
-             areq textField "Descrição" Nothing <*>
+             areq textareaField "Descrição" Nothing <*>
              areq doubleField "Valor" Nothing
              
-formPedido :: Form Pedido
-formPedido = renderDivs $ Pedido <$>
-             areq (selectField clint) "Cliente" Nothing <*>
-             areq dayField "Entrega" Nothing <*>
-             areq doubleField "Total" Nothing
+formFornecedor :: Form Fornecedor
+formFornecedor = renderDivs $ Fornecedor <$>
+             areq textField "Nome" Nothing <*>
+             areq textField "Telefone" Nothing <*>
+             areq textField "Endereco" Nothing <*>
+             areq textField "Cidade" Nothing
              
-clint = do
-       entidades <- runDB $ selectList [] [Asc ClienteNome] 
-       optionsPairs $ fmap (\ent -> (clienteNome $ entityVal ent, entityKey ent)) entidades
-     
 
 getHelloR :: Handler Html
 getHelloR = defaultLayout [whamlet|
@@ -147,6 +144,24 @@ getProdR = do
                         <meta charset="UTF-8">  
                     |]  
 
+getFornR :: Handler Html
+getFornR = do
+            (widget, enctype) <- generateFormPost formFornecedor
+            defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/addforn.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                        <meta charset="UTF-8">  
+                    |]  
+
+
 getListaCliR :: ClienteId -> Handler Html
 getListaCliR cid = do
         cliente <- runDB $ get404 cid 
@@ -182,25 +197,7 @@ getListaProdR pid = do
                         <meta charset="UTF-8">  
                     |]
 
-{-
-getListaPedR :: ProdutoId -> Handler Html
-getListaPedR pdid = do
-        pedido <- runDB $ get404 pdid 
-        defaultLayout $ do
-            menu <- widgetMenu
-            toWidget $ $(luciusFile "templates/style.lucius")
-            $(whamletFile "templates/pedido.hamlet")
-            addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
-            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
-            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
-            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
-            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
-            toWidgetHead
-                [hamlet|
-                    <meta charset="UTF-8">  
-                |]
 
--}
 --Tela de consulta de clientes cadastrados
 getListarR :: Handler Html
 getListarR = do
@@ -249,18 +246,6 @@ getListProdR = do
                 input { background-color: #ecc; border:0;}
              |]
 
-{-
-getListPedR :: Handler Html
-getListPedR = do
-   
-    xs <- runDB $ (rawSql (pack $ ""SELECT ?? "
-  , "FROM  pedido,     pedido_cliente "
-  , "WHERE pedido.id = pedido_cliente.pedido "
-  , "AND   ?       = pedido_cliente.cliente"
-
-    sendResponse (object [pack "data" .= fmap (toJSON . (\(p,_,_) -> p)) xs])
-
--}
 
 
 postClienteR :: Handler Html
@@ -305,6 +290,27 @@ postProdR = do
                                 |]
                     _ -> redirect ProdR
 
+postFornR :: Handler Html
+postFornR = do
+                ((result, _), _) <- runFormPost formFornecedor
+                case result of
+                    FormSuccess fornecedor -> do
+                       runDB $ insert fornecedor 
+                       defaultLayout $ do
+                            menu <- widgetMenu
+                            toWidget $ $(luciusFile "templates/style.lucius")
+                            $(whamletFile "templates/novocad.hamlet")
+                            addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                            toWidgetHead
+                                [hamlet|
+                                    <meta charset="UTF-8">  
+                                |]
+                    _ -> redirect FornR
+
 postListaCliR :: ClienteId -> Handler Html
 postListaCliR cid = do
      runDB $ delete cid
@@ -332,52 +338,8 @@ getUsuarioR = do
                         <meta charset="UTF-8">  
                     |]
 
-getPedidoR :: Handler Html
-getPedidoR = do
-           (widget, enctype) <- generateFormPost formPedido
-           defaultLayout $ do
-                menu <- widgetMenu
-                toWidget $ $(luciusFile "templates/style.lucius")
-                $(whamletFile "templates/addpedido.hamlet")
-                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
-                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
-                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
-                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
-                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
-                toWidgetHead
-                    [hamlet|
-                        <meta charset="UTF-8">  
-                    |]
 
-postPedidoR :: Handler Html
-postPedidoR = do
-                ((result, _), _) <- runFormPost formPedido
-                case result of
-                    FormSuccess pedido -> do
-                       runDB $ insert pedido 
-                       defaultLayout $ do
-                            menu <- widgetMenu
-                            toWidget $ $(luciusFile "templates/style.lucius")
-                            $(whamletFile "templates/novocad.hamlet")
-                            addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
-                            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
-                            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
-                            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
-                            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
-                            toWidgetHead
-                                [hamlet|
-                                    <meta charset="UTF-8">  
-                                |]
-                    _ -> redirect PedidoR
 
-{-
-postListaPedR :: PedidoId -> Handler Html
-postListaPedR peid = do
-     runDB $ delete peid
-     redirect ListPedR
- -}
- 
- 
 formUsers :: Form Users
 formUsers = renderBootstrap3 BootstrapBasicForm $ Users <$>
            areq textField (bfs ("Nome" :: Text)) Nothing <*>
@@ -464,7 +426,7 @@ widgetMenu = do
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
                     <li><a href="@{ClienteR}"><i class="fa fa-user-plus" aria-hidden="true"></i> Cadastro de Clientes</a><p>
                     <li><a href="@{ProdR}"><i class="fa fa-barcode" aria-hidden="true"></i> Cadastro de Produtos</a><p>
-                    <li><a href="@{PedidoR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Pedidos</a><p>
+                    <li><a href="@{FornR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Fornecedor</a><p>
                     <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
                     <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
                     <li><a href="@{LoginR}"><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> Login</a>
@@ -475,7 +437,7 @@ widgetMenu = do
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
                     <li><a href="@{ClienteR}"><i class="fa fa-user-plus" aria-hidden="true"></i> Cadastro de Clientes</a><p>
                     <li><a href="@{ProdR}"><i class="fa fa-barcode" aria-hidden="true"></i> Cadastro de Produtos</a><p>
-                    <li><a href="@{PedidoR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Pedidos</a><p>
+                    <li><a href="@{FornR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Fornecedor</a><p>
                     <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
                     <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
@@ -487,7 +449,7 @@ widgetMenu = do
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
                     <li><a href="@{ClienteR}"><i class="fa fa-user-plus" aria-hidden="true"></i> Cadastro de Clientes</a><p>
                     <li><a href="@{ProdR}"><i class="fa fa-barcode" aria-hidden="true"></i> Cadastro de Produtos</a><p>
-                    <li><a href="@{PedidoR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Pedidos</a><p>
+                    <li><a href="@{FornR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Fornecedor</a><p>
                     <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
                     <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>

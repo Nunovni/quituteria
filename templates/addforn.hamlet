@@ -6,8 +6,8 @@
     <div class="col-sm-3">
       ^{menu}
     <div class="col-sm-9">
-        <h1>Adicionar novos pedidos:
-        <p>Insira dos dados do seu novo pedido:
-        <form method=post enctype=#{enctype} action="@{PedidoR}">
+        <h1>Adicionar novos Fornecedores:
+        <p>Insira dos dados do seu novo fornecedor:
+        <form method=post enctype=#{enctype} action="@{FornR}">
             ^{widget}
             <input type="submit" value="Enviar"> 

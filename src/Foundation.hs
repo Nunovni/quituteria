@@ -6,7 +6,6 @@ module Foundation where
 import Import
 import Yesod
 import Data.Text
-import Data.Time
 import Database.Persist.Postgresql
     ( ConnectionPool, SqlBackend, runSqlPool, runMigration )
 
@@ -16,23 +15,23 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 
 Cliente json
     nome Text
-    telefone Int
+    telefone Text
     endereco Text
     cidade Text
     deriving Show
 
 Produto json
     nome Text
-    descricao Text
+    descricao Textarea
     valor Double
     deriving Show
 
 
-Pedido json
-    clientenome ClienteId
-    --clientenome
-    dataEntrega Day
-    total Double
+Fornecedor json
+    nome Text
+    telefone Text
+    endereco Text
+    cidade Text
     deriving Show
 
 Users json
