@@ -111,7 +111,7 @@ widgetForm x enctype widget y = [whamlet|
                 ^{widget}
                 <input type="submit" value="Cadastrar">
 |]
-
+--gerador do formulario de clientes
 getClienteR :: Handler Html
 getClienteR = do
             (widget, enctype) <- generateFormPost formCliente
@@ -145,7 +145,7 @@ getProdR = do
                     [hamlet|
                         <meta charset="UTF-8">  
                     |]  
-
+--gerador do formulario de fornecedor
 getFornR :: Handler Html
 getFornR = do
             (widget, enctype) <- generateFormPost formFornecedor
