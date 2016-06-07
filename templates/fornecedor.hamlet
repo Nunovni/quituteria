@@ -6,6 +6,7 @@
     <div class="col-sm-3">
       ^{menu}
     <div class="col-sm-9">
-             <h2> Dados do pedido
-             <p> Cliente: #{clienteNome pdid}
-             <p> Valor: R$
+     <h2>Fornecedor - #{fornecedorNome fornecedor}
+            <p> Telefone:    #{fornecedorTelefone fornecedor}
+            <p> Endereço:    #{fornecedorEndereco fornecedor}
+            <p> Cidade:      #{fornecedorCidade fornecedor}

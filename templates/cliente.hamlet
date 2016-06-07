@@ -7,6 +7,6 @@
       ^{menu}
     <div class="col-sm-9">
      <h2>Cliente - #{clienteNome cliente}
-            <p> Telefone: #{clienteTelefone cliente}
-            <p> Endereço: #{clienteEndereco cliente}
-            <p> Cidade: #{clienteCidade cliente}
+            <p> Telefone:    #{clienteTelefone cliente}
+            <p> Endereço:    #{clienteEndereco cliente}
+            <p> Cidade:      #{clienteCidade cliente}

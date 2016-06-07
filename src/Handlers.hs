@@ -197,6 +197,23 @@ getListaProdR pid = do
                         <meta charset="UTF-8">  
                     |]
 
+getListaFornR :: FornecedorId -> Handler Html
+getListaFornR fid = do
+        fornecedor <- runDB $ get404 fid 
+        defaultLayout $ do
+            menu <- widgetMenu
+            toWidget $ $(luciusFile "templates/style.lucius")
+            $(whamletFile "templates/fornecedor.hamlet")
+            addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+            toWidgetHead
+                [hamlet|
+                    <meta charset="UTF-8">  
+                |]
+
 
 --Tela de consulta de clientes cadastrados
 getListarR :: Handler Html
@@ -246,6 +263,28 @@ getListProdR = do
                 input { background-color: #ecc; border:0;}
              |]
 
+getListFornR :: Handler Html
+getListFornR = do
+             listaF <- runDB $ selectList [] [Asc FornecedorNome]
+             defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/verforn.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                addStylesheetRemote "https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css"
+                addScriptRemote "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"
+                addScriptRemote "https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                <meta charset="UTF-8">  
+             |] >> toWidget [lucius|
+                form  { display:inline; }
+                input { background-color: #ecc; border:0;}
+             |]
 
 
 postClienteR :: Handler Html
@@ -320,6 +359,11 @@ postListaProdR :: ProdutoId -> Handler Html
 postListaProdR pid = do
      runDB $ delete pid
      redirect ListProdR
+
+postListaFornR :: FornecedorId -> Handler Html
+postListaFornR fid = do
+     runDB $ delete fid
+     redirect ListFornR
      
 getUsuarioR :: Handler Html
 getUsuarioR = do
@@ -429,6 +473,7 @@ widgetMenu = do
                     <li><a href="@{FornR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Fornecedor</a><p>
                     <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
                     <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
+                    <li><a href="@{ListFornR}"><i class="fa fa-truck" aria-hidden="true"></i> Fornecedores Cadastrados</a><p>  
                     <li><a href="@{LoginR}"><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> Login</a>
     |]
         Just "0" -> [hamlet|
@@ -440,6 +485,7 @@ widgetMenu = do
                     <li><a href="@{FornR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Fornecedor</a><p>
                     <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
                     <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
+                    <li><a href="@{ListFornR}"><i class="fa fa-truck" aria-hidden="true"></i> Fornecedores Cadastrados</a><p>  
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
                     <li><a href="@{AdminR}"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> Administração</a>
                     |]
@@ -452,5 +498,7 @@ widgetMenu = do
                     <li><a href="@{FornR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Fornecedor</a><p>
                     <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
                     <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
+                    <li><a href="@{ListFornR}"><i class="fa fa-truck" aria-hidden="true"></i> Fornecedores Cadastrados</a><p>                    
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
                     |]
+                    

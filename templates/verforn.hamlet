@@ -6,13 +6,12 @@
     <div class="col-sm-3">
       ^{menu}
     <div class="col-sm-9">
-        <h1>Lista de Pedidos
-        <table id="cliente" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <h1>Lista de Fornecedores
+        <table id="fornecedor" class="table table-striped table-bordered" cellspacing="0" width="100%">
           <thead>
           <tbody>
-                    $forall Entity pdid pedido <- listaPed
-                     <a href=@{ListaPedR pdid}> #{clienteNome pdid} 
-                        <i class="fa fa-trash-o" aria-hidden="true"></i>
-                        <form method=post action=@{ListaPedR pdid}>
-                        <input type="submit" value="Deletar"><br>
+                    $forall Entity fid fornecedor <- listaF
+                     <a href=@{ListaFornR fid}> #{fornecedorNome fornecedor} 
+                     <i class="fa fa-trash-o" aria-hidden="true"></i><form method=post action=@{ListaFornR fid}> 
+                         <input type="submit" value="Deletar"><br>
                 
