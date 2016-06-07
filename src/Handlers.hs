@@ -329,20 +329,19 @@ postLoginR :: Handler Html
 postLoginR = do
            ((result, _), _) <- runFormPost formLogin
            case result of 
-               FormSuccess ("admin","admin") -> setSession "_ID" "admin" >> redirect AdminR
+               FormSuccess ("admin","admin") -> setSession "_ID" "0" >> redirect HomeR
                FormSuccess (login,senha) -> do 
                    user <- runDB $ selectFirst [UsersLogin ==. login, UsersSenha ==. senha] []
                    case user of
                        Nothing -> redirect LoginR
-                       Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect (PerfilR pid)
+                       Just (Entity pid u) -> setSession "_ID" (pack $ show $ fromSqlKey pid) >> redirect (HomeR)
 
 
 getLogoutR :: Handler Html
 getLogoutR = do
      deleteSession "_ID"
-     defaultLayout [whamlet| 
-         <h1> ADEUS!
-     |]
+     redirect (HomeR)
+
      
 getErroR :: Handler Html
 getErroR = defaultLayout [whamlet|
