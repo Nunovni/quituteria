@@ -114,14 +114,37 @@ widgetForm x enctype widget y = [whamlet|
 
 getClienteR :: Handler Html
 getClienteR = do
-             (widget, enctype) <- generateFormPost formCliente
-             defaultLayout $ widgetForm ClienteR enctype widget "Clientes"
+            (widget, enctype) <- generateFormPost formCliente
+            defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/addclientes.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                        <meta charset="UTF-8">  
+                    |]  
 
 getProdR :: Handler Html
 getProdR = do
-             (widget, enctype) <- generateFormPost formProduto
-             defaultLayout $ widgetForm ProdR enctype widget "Produto"
-
+            (widget, enctype) <- generateFormPost formProduto
+            defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/addproduto.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                        <meta charset="UTF-8">  
+                    |]  
 
 getListaCliR :: ClienteId -> Handler Html
 getListaCliR cid = do
@@ -356,20 +379,20 @@ widgetMenu = do
             <nav id="column_left">
                 <ul class="nav nav-list">
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
-                    <li><a href="@{ClienteR}"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
-                    <li><a href="@{ProdR}"> <i class="fa fa-file-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
-                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
-                    <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>
+                    <li><a href="@{ClienteR}"><i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
+                    <li><a href="@{ProdR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{ListarR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Clientes Cadastrados</a>
+                    <li><a href="@{ListProdR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Produtos Cadastrados</a>
                     <li><a href="@{LoginR}"><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> Login</a>
                     |]
         Just "0" -> [hamlet|
             <nav id="column_left">
                 <ul class="nav nav-list">
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
-                    <li><a href="@{ClienteR}"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
-                    <li><a href="@{ProdR}"> <i class="fa fa-file-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
-                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
-                    <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>
+                    <li><a href="@{ClienteR}"><i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
+                    <li><a href="@{ProdR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{ListarR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Clientes Cadastrados</a>
+                    <li><a href="@{ListProdR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Produtos Cadastrados</a>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
                     <li><a href="@{AdminR}"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> Administração</a>
                     |]
@@ -377,9 +400,9 @@ widgetMenu = do
             <nav id="column_left">
                 <ul class="nav nav-list">
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
-                    <li><a href="@{ClienteR}"><i class="fa fa-file-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
-                    <li><a href="@{ProdR}"> <i class="fa fa-file-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
-                    <li><a href="@{ListarR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Clientes</a>
-                    <li><a href="@{ListProdR}"> <i class="fa fa-search fa-fw" aria-hidden="true"></i> Consultar Produtos</a>>
+                    <li><a href="@{ClienteR}"><i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
+                    <li><a href="@{ProdR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{ListarR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Clientes Cadastrados</a>
+                    <li><a href="@{ListProdR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Produtos Cadastrados</a>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
                     |]
