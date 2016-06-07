@@ -29,7 +29,7 @@ Produto json
 
 
 Pedido json
-    clienteid ClienteId
+    clientenome ClienteId
     --clientenome
     dataEntrega Day
     total Double

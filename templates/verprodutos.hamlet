@@ -11,6 +11,7 @@
           <thead>
           <tbody>
                  $forall Entity pid produto <- listaP
-                     <a href=@{ListaProdR pid}> #{produtoNome produto} 
+                     <a href=@{ListaProdR pid}> #{produtoNome produto}
+                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                      <form method=post action=@{ListaProdR pid}> 
                          <input type="submit" value="Deletar"><br>
