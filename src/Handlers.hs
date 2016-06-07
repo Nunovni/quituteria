@@ -264,8 +264,20 @@ getUsuarioR = do
 
 getPedidoR :: Handler Html
 getPedidoR = do
-             (widget, enctype) <- generateFormPost formPedido
-             defaultLayout $ widgetForm PedidoR enctype widget "Pedidos"
+           (widget, enctype) <- generateFormPost formPedido
+           defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/addpedido.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                        <meta charset="UTF-8">  
+                    |]
 
 postPedidoR :: Handler Html
 postPedidoR = do
@@ -381,6 +393,7 @@ widgetMenu = do
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
                     <li><a href="@{ClienteR}"><i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
                     <li><a href="@{ProdR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{PedidoR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Pedidos</a>
                     <li><a href="@{ListarR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Clientes Cadastrados</a>
                     <li><a href="@{ListProdR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Produtos Cadastrados</a>
                     <li><a href="@{LoginR}"><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> Login</a>
@@ -391,6 +404,7 @@ widgetMenu = do
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
                     <li><a href="@{ClienteR}"><i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
                     <li><a href="@{ProdR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{PedidoR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Pedidos</a>
                     <li><a href="@{ListarR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Clientes Cadastrados</a>
                     <li><a href="@{ListProdR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Produtos Cadastrados</a>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
@@ -402,6 +416,7 @@ widgetMenu = do
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
                     <li><a href="@{ClienteR}"><i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
                     <li><a href="@{ProdR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
+                    <li><a href="@{PedidoR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Pedidos</a>
                     <li><a href="@{ListarR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Clientes Cadastrados</a>
                     <li><a href="@{ListProdR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Produtos Cadastrados</a>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
