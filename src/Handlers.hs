@@ -36,7 +36,6 @@ getHomeR = defaultLayout $ do
                         <meta charset="UTF-8">  
                     |]                
 
-
 instance YesodPersist Pagina where
    type YesodPersistBackend Pagina = SqlBackend
    runDB f = do
@@ -173,12 +172,21 @@ getListaProdR pid = do
 getListarR :: Handler Html
 getListarR = do
              listaC <- runDB $ selectList [] [Asc ClienteNome]
-             defaultLayout $ [whamlet|
-                 <h1> Clientes cadastrados:
-                 $forall Entity cid cliente <- listaC
-                     <a href=@{ListaCliR cid}> #{clienteNome cliente} 
-                     <form method=post action=@{ListaCliR cid}> 
-                         <input type="submit" value="Deletar"><br>
+             defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/verclientes.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                addStylesheetRemote "https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css"
+                addScriptRemote "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"
+                addScriptRemote "https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                <meta charset="UTF-8">  
              |] >> toWidget [lucius|
                 form  { display:inline; }
                 input { background-color: #ecc; border:0;}
