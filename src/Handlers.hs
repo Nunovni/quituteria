@@ -289,10 +289,11 @@ formLogin = renderBootstrap3 BootstrapBasicForm $ (,) <$>
 getPerfilR :: UsersId -> Handler Html
 getPerfilR uid = do
       user <- runDB $ get404 uid
-      defaultLayout $ do
-          toWidget $ $(luciusFile "templates/perfil.lucius")
-          $(whamletFile "templates/perfil.hamlet")
-
+      defaultLayout [whamlet|
+          <p><b> Pagina de #{usersNome user}
+          <p><b> Login: #{usersLogin user}
+      |]
+      
 postUsuarioR :: Handler Html
 postUsuarioR = do
            ((result, _), _) <- runFormPost formUsers
