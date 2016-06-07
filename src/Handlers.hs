@@ -47,12 +47,15 @@ instance YesodPersist Pagina where
 
 instance Yesod Pagina where
     authRoute _ = Just LoginR
-    
     isAuthorized LoginR _ = return Authorized
     isAuthorized ErroR _ = return Authorized
     isAuthorized HomeR _ = return Authorized
+    isAuthorized ClienteR _ = return Authorized
+    isAuthorized ProdR _ = return Authorized
     isAuthorized UsuarioR _ = return Authorized
     isAuthorized AdminR _ = isAdmin
+    isAuthorized ListarR _ = return Authorized
+    isAuthorized UsuarioR _ = return Authorized
     isAuthorized _ _ = isUser
 
 isUser = do
@@ -388,25 +391,25 @@ widgetMenu = do
     mu <- lookupSession "_ID"
     return $ case mu of
         Nothing ->  [hamlet|
-            <nav id="column_left">
+        <nav id="column_left">
                 <ul class="nav nav-list">
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
-                    <li><a href="@{ClienteR}"><i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
-                    <li><a href="@{ProdR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
-                    <li><a href="@{PedidoR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Pedidos</a>
-                    <li><a href="@{ListarR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Clientes Cadastrados</a>
-                    <li><a href="@{ListProdR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Produtos Cadastrados</a>
+                    <li><a href="@{ClienteR}"><i class="fa fa-user-plus" aria-hidden="true"></i> Cadastro de Clientes</a><p>
+                    <li><a href="@{ProdR}"><i class="fa fa-barcode" aria-hidden="true"></i> Cadastro de Produtos</a><p>
+                    <li><a href="@{PedidoR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Pedidos</a><p>
+                    <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
+                    <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
                     <li><a href="@{LoginR}"><i class="fa fa-sign-in fa-fw" aria-hidden="true"></i> Login</a>
-                    |]
+    |]
         Just "0" -> [hamlet|
             <nav id="column_left">
                 <ul class="nav nav-list">
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
-                    <li><a href="@{ClienteR}"><i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
-                    <li><a href="@{ProdR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
-                    <li><a href="@{PedidoR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Pedidos</a>
-                    <li><a href="@{ListarR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Clientes Cadastrados</a>
-                    <li><a href="@{ListProdR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Produtos Cadastrados</a>
+                    <li><a href="@{ClienteR}"><i class="fa fa-user-plus" aria-hidden="true"></i> Cadastro de Clientes</a><p>
+                    <li><a href="@{ProdR}"><i class="fa fa-barcode" aria-hidden="true"></i> Cadastro de Produtos</a><p>
+                    <li><a href="@{PedidoR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Pedidos</a><p>
+                    <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
+                    <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
                     <li><a href="@{AdminR}"><i class="fa fa-lock fa-fw" aria-hidden="true"></i> Administração</a>
                     |]
@@ -414,10 +417,10 @@ widgetMenu = do
             <nav id="column_left">
                 <ul class="nav nav-list">
                     <li><a href="@{HomeR}"><i class="fa fa-home fa-fw" aria-hidden="true"></i> Home</a>
-                    <li><a href="@{ClienteR}"><i class="fa fa-keyboard-o fa-fw" aria-hidden="true"></i> Cadastro de Clientes</a>
-                    <li><a href="@{ProdR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Produtos</a>
-                    <li><a href="@{PedidoR}"> <i class="fa fa-keyboard-o fa-fw" aria-hidden="true"true"></i> Cadastro de Pedidos</a>
-                    <li><a href="@{ListarR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Clientes Cadastrados</a>
-                    <li><a href="@{ListProdR}"> <i class="fa fa-folder-open fa-fw" aria-hidden="true"></i> Produtos Cadastrados</a>
+                    <li><a href="@{ClienteR}"><i class="fa fa-user-plus" aria-hidden="true"></i> Cadastro de Clientes</a><p>
+                    <li><a href="@{ProdR}"><i class="fa fa-barcode" aria-hidden="true"></i> Cadastro de Produtos</a><p>
+                    <li><a href="@{PedidoR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Pedidos</a><p>
+                    <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
+                    <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
                     |]

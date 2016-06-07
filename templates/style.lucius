@@ -7,7 +7,7 @@ body {
 }
 .title {
     font-family: 'Bree Serif', serif;
-    margin-left: 20px;
+    margin-left: 10px;
     font-size: 40px;
     text-shadow: 2px 2px #DCDCDC
 }
