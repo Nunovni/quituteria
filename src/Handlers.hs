@@ -20,7 +20,7 @@ import Database.Persist.Postgresql
 mkYesodDispatch "Pagina" pRoutes
 
 
-
+--principal
 getHomeR :: Handler Html
 getHomeR = defaultLayout $ do
                 menu <- widgetMenu
@@ -50,7 +50,9 @@ instance Yesod Pagina where
     isAuthorized ErroR _ = return Authorized
     isAuthorized HomeR _ = return Authorized
     isAuthorized ClienteR _ = return Authorized
+    isAuthorized FornR _ = return Authorized
     isAuthorized ProdR _ = return Authorized
+    isAuthorized ListFornR _ = return Authorized    
     isAuthorized UsuarioR _ = return Authorized
     isAuthorized AdminR _ = isAdmin
     isAuthorized ListarR _ = return Authorized
