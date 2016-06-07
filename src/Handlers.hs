@@ -290,10 +290,19 @@ postProdR = do
                 case result of
                     FormSuccess produto -> do
                        runDB $ insert produto 
-                       defaultLayout [whamlet| 
-                           <h1> #{produtoNome produto} Inserido com sucesso. 
-                           <input name="" type="button" onClick="{/consulta/produto}" value="Voltar">
-                       |]
+                       defaultLayout $ do
+                            menu <- widgetMenu
+                            toWidget $ $(luciusFile "templates/style.lucius")
+                            $(whamletFile "templates/novocad.hamlet")
+                            addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                            toWidgetHead
+                                [hamlet|
+                                    <meta charset="UTF-8">  
+                                |]
                     _ -> redirect ProdR
 
 postListaCliR :: ClienteId -> Handler Html
@@ -346,9 +355,19 @@ postPedidoR = do
                 case result of
                     FormSuccess pedido -> do
                        runDB $ insert pedido 
-                       defaultLayout [whamlet| 
-                           <h1> Inserido com sucesso. 
-                       |]
+                       defaultLayout $ do
+                            menu <- widgetMenu
+                            toWidget $ $(luciusFile "templates/style.lucius")
+                            $(whamletFile "templates/novocad.hamlet")
+                            addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                            toWidgetHead
+                                [hamlet|
+                                    <meta charset="UTF-8">  
+                                |]
                     _ -> redirect PedidoR
 
 {-
