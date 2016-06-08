@@ -211,6 +211,23 @@ getListaFornR fid = do
                     <meta charset="UTF-8">  
                 |]
 
+getListaUserR :: UsersId -> Handler Html
+getListaUserR uid = do
+        users <- runDB $ get404 uid 
+        defaultLayout $ do
+            menu <- widgetMenu
+            toWidget $ $(luciusFile "templates/style.lucius")
+            $(whamletFile "templates/usuario.hamlet")
+            addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+            addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+            addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+            addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+            toWidgetHead
+                [hamlet|
+                    <meta charset="UTF-8">  
+                |]
+
 
 --Tela de consulta de clientes cadastrados
 getListarR :: Handler Html
@@ -267,6 +284,29 @@ getListFornR = do
                 menu <- widgetMenu
                 toWidget $ $(luciusFile "templates/style.lucius")
                 $(whamletFile "templates/verforn.hamlet")
+                addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
+                addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+                addScriptRemote "https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"
+                addScriptRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
+                addStylesheetRemote "https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css"
+                addScriptRemote "https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"
+                addScriptRemote "https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"
+                toWidgetHead
+                    [hamlet|
+                <meta charset="UTF-8">  
+             |] >> toWidget [lucius|
+                form  { display:inline; }
+                input { background-color: #ecc; border:0;}
+             |]
+
+getListUserR :: Handler Html
+getListUserR = do
+             listaU <- runDB $ selectList [] [Asc UsersNome]
+             defaultLayout $ do
+                menu <- widgetMenu
+                toWidget $ $(luciusFile "templates/style.lucius")
+                $(whamletFile "templates/veruser.hamlet")
                 addStylesheetRemote "https://fonts.googleapis.com/css?family=Bree+Serif"
                 addStylesheetRemote "https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"    
                 addStylesheetRemote "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
@@ -361,6 +401,11 @@ postListaFornR :: FornecedorId -> Handler Html
 postListaFornR fid = do
      runDB $ delete fid
      redirect ListFornR
+     
+postListaUserR :: UsersId -> Handler Html
+postListaUserR uid = do
+     runDB $ delete uid
+     redirect ListUserR
      
 getUsuarioR :: Handler Html
 getUsuarioR = do
@@ -482,6 +527,7 @@ widgetMenu = do
                     <li><a href="@{FornR}"><i class="fa fa-cart-plus" aria-hidden="true"></i> Cadastro de Fornecedor</a><p>
                     <li><a href="@{ListarR}"><i class="fa fa-users" aria-hidden="true"></i> Clientes Cadastrados</a><p>
                     <li><a href="@{ListProdR}"><i class="fa fa-list-ul" aria-hidden="true"></i> Produtos Cadastrados</a><p>
+                    <li><a href="@{ListUserR}"><i class="fa fa-user-secret" aria-hidden="true"></i> Usuarios Cadastrados</a><p>
                     <li><a href="@{ListFornR}"><i class="fa fa-truck" aria-hidden="true"></i> Fornecedores Cadastrados</a><p>  
                     <li><a href="@{LogoutR}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i> Logout</a>
                     |]
