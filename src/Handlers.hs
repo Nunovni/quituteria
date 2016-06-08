@@ -49,13 +49,8 @@ instance Yesod Pagina where
     isAuthorized LoginR _ = return Authorized
     isAuthorized ErroR _ = return Authorized
     isAuthorized HomeR _ = return Authorized
-    isAuthorized ClienteR _ = return Authorized
-    isAuthorized FornR _ = return Authorized
-    isAuthorized ProdR _ = return Authorized
-    isAuthorized ListFornR _ = return Authorized    
     isAuthorized UsuarioR _ = return Authorized
     isAuthorized AdminR _ = isAdmin
-    isAuthorized ListarR _ = return Authorized
     isAuthorized _ _ = isUser
 
 isUser = do
